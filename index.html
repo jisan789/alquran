@@ -8,7 +8,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&family=Noto+Serif+Bengali:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- Icons -->
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
@@ -32,7 +32,7 @@
 
   /* Typography */
   --font-ui: 'Plus Jakarta Sans', sans-serif;
-  --font-ar: 'Amiri Quran', serif;
+  --font-ar: 'Noto Naskh Arabic', serif;
   --font-bn: 'Noto Serif Bengali', serif;
 
   /* Elevations & Shadows */
@@ -553,6 +553,18 @@ button {
   color: var(--text-main);
 }
 
+.site-note-link {
+  display: inline-block;
+  margin-top: 10px;
+  color: var(--brand);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.site-note-link:hover {
+  text-decoration: underline;
+}
+
 .ayah-card {
   background-color: var(--bg-surface);
   border-radius: var(--radius-md);
@@ -570,6 +582,20 @@ button {
   box-shadow: var(--shadow-md);
 }
 
+.ayah-card.playable-ayah {
+  cursor: pointer;
+}
+
+.ayah-card.playable-ayah:hover {
+  transform: translateY(-2px);
+}
+
+.ayah-card.playing-ayah {
+  border-color: rgba(10, 92, 83, 0.4);
+  box-shadow: var(--shadow-lg);
+  background: linear-gradient(180deg, rgba(240, 253, 250, 1) 0%, rgba(255, 255, 255, 1) 100%);
+}
+
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -580,6 +606,8 @@ button {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 24px;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .ayah-number {
@@ -599,6 +627,37 @@ button {
   color: var(--brand);
 }
 
+.ayah-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  background: var(--brand-light);
+  color: var(--brand-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: 1px solid rgba(10, 92, 83, 0.14);
+}
+
+.ayah-toggle-btn:hover {
+  background: rgba(224, 242, 241, 0.7);
+  border-color: rgba(10, 92, 83, 0.28);
+}
+
+.ayah-toggle-btn.active {
+  background: var(--brand);
+  color: #fff;
+}
+
+.ayah-word-section {
+  display: none;
+}
+
+.ayah-word-section.visible {
+  display: block;
+}
+
 .ayah-arabic {
   font-family: var(--font-ar);
   font-size: clamp(2rem, 4vw, 2.8rem);
@@ -608,6 +667,29 @@ button {
   line-height: 1.8;
   margin-bottom: 24px;
   word-spacing: 4px;
+}
+
+.ayah-word-inline {
+  display: inline-block;
+  padding: 0 4px;
+  margin: 0 1px;
+  border-radius: 10px;
+  transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
+}
+
+.ayah-word-inline.playable {
+  cursor: pointer;
+}
+
+.ayah-word-inline.playable:hover {
+  background: rgba(10, 92, 83, 0.12);
+  color: var(--brand-dark);
+  transform: translateY(-1px);
+}
+
+.ayah-word-inline.playing {
+  background: rgba(10, 92, 83, 0.18);
+  color: var(--brand-dark);
 }
 
 .ayah-separator {
@@ -740,6 +822,67 @@ button {
   transition: width 0.1s linear;
 }
 
+.ayah-meaning-bar {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(140%);
+  width: min(920px, calc(100% - 24px));
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.98);
+  border: 1px solid rgba(10, 92, 83, 0.12);
+  box-shadow: var(--shadow-lg);
+  z-index: 60;
+  transition: transform var(--transition-smooth);
+}
+
+.ayah-meaning-bar.visible {
+  transform: translateX(-50%) translateY(0);
+}
+
+.ayah-meaning-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ayah-meaning-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--brand);
+}
+
+.ayah-meaning-ref {
+  margin-top: 4px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--brand-dark);
+}
+
+.ayah-meaning-close {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--brand-light);
+  color: var(--brand-dark);
+  border: 1px solid rgba(10, 92, 83, 0.12);
+}
+
+.ayah-meaning-text {
+  margin-top: 14px;
+  font-family: var(--font-bn);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text-main);
+}
+
 /* ==========================================================================
    Utilities & Animations
    ========================================================================== */
@@ -826,6 +969,12 @@ button {
     padding: 10px 16px;
     bottom: 20px;
   }
+
+  .ayah-meaning-bar {
+    bottom: 18px;
+    width: calc(100% - 20px);
+    padding: 16px;
+  }
   
   .player-meta {
     flex-direction: column;
@@ -902,7 +1051,7 @@ button {
       <div class="hero-card" id="hero-card">
         <div class="hero-bg-pattern"></div>
         <i class="ph-fill ph-mosque" style="font-size: 4.5rem; color: var(--accent-light); margin-bottom: 20px; opacity: 0.9;"></i>
-        <h1 style="font-family: 'Amiri Quran', serif; font-size: clamp(2.8rem, 5vw, 4.5rem);">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h1>
+        <h1 style="font-family: var(--font-ar); font-size: clamp(2.8rem, 5vw, 4.5rem);">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</h1>
         <p style="font-family: 'Noto Serif Bengali', serif; font-size: 1.3rem; color: rgba(255,255,255,0.85); margin-top: 16px; font-weight: 500;">পরম করুণাময় অসীম দয়ালু আল্লাহর নামে</p>
       </div>
 
@@ -915,12 +1064,8 @@ button {
       </div>
 
       <div class="site-note">
-        <div class="site-note-title">Free Use</div>
-        <div class="site-note-text">Copyright free. This Al Quran website is free to use with no restrictions.</div>
-        <div class="site-note-meta">
-          Developed by Jisan.<br>
-          Disclaimer: All data is retrieved from external sources.
-        </div>
+        <div class="site-note-title">Need Help?</div>
+        <div class="site-note-text">Email me on mdjisanvs@gmail.com if you need any help.</div>
       </div>
       
     </div>
@@ -946,6 +1091,19 @@ button {
     <div class="progress-container" id="progress-container">
       <div class="progress-bar" id="progress-bar"></div>
     </div>
+  </div>
+
+  <div class="ayah-meaning-bar" id="ayah-meaning-bar">
+    <div class="ayah-meaning-header">
+      <div>
+        <div class="ayah-meaning-label">Word Meaning</div>
+        <div class="ayah-meaning-ref" id="ayah-meaning-ref">Select a word</div>
+      </div>
+      <button class="ayah-meaning-close" id="ayah-meaning-close" type="button">
+        <i class="ph ph-x"></i>
+      </button>
+    </div>
+    <div class="ayah-meaning-text" id="ayah-meaning-text"></div>
   </div>
 
   <audio id="audio-element"></audio>
@@ -984,16 +1142,23 @@ button {
       progressBar: document.getElementById('progress-bar'),
       progressContainer: document.getElementById('progress-container'),
       closePlayerBtn: document.getElementById('close-player-btn'),
-      timeDisplay: document.getElementById('time-display')
+      timeDisplay: document.getElementById('time-display'),
+      ayahMeaningBar: document.getElementById('ayah-meaning-bar'),
+      ayahMeaningRef: document.getElementById('ayah-meaning-ref'),
+      ayahMeaningText: document.getElementById('ayah-meaning-text'),
+      ayahMeaningClose: document.getElementById('ayah-meaning-close')
     };
 
     // State
     let state = {
       surahs: [],
       activeSurah: null,
+      activeAyah: null,
       reciters: [],
       activeReciterId: localStorage.getItem('reciter') || 7,
-      isBuffering: false
+      isBuffering: false,
+      playbackMode: 'surah',
+      wordMeaningTimer: null
     };
 
     // --- Initialization ---
@@ -1096,6 +1261,9 @@ button {
 
     async function loadSurahContent(surah) {
       state.activeSurah = surah;
+      state.activeAyah = null;
+      clearPlayingAyahState();
+      hideAyahMeaningBar();
       if(window.innerWidth <= 1024) toggleMenu(false);
       
       document.querySelectorAll('.surah-item').forEach(el => {
@@ -1126,7 +1294,7 @@ button {
       dom.ayahList.innerHTML = `<div class="loader-wrapper"><i class="ph ph-circle-notch loading-spinner"></i></div>`;
 
       try {
-        const res = await fetch(`${API_BASE}/verses/by_chapter/${surah.id}?translations=161&fields=text_uthmani&per_page=300`);
+        const res = await fetch(`${API_BASE}/verses/by_chapter/${surah.id}?language=bn&words=true&word_fields=text_uthmani,translation,audio_url&translations=161&fields=text_uthmani&per_page=300`);
         const data = await res.json();
         
         dom.ayahList.innerHTML = '';
@@ -1144,15 +1312,145 @@ button {
       const div = document.createElement('div');
       div.className = 'ayah-card';
       div.style.animationDelay = `${delay}s`;
+      const wordMarkup = (verse.words || [])
+        .filter(word => word.char_type_name === 'word')
+        .map(word => `
+          <div class="ayah-word-card">
+            <div class="ayah-word-ar">${word.text_uthmani || word.text || ''}</div>
+            <div class="ayah-word-bn">${word.translation?.text || 'অর্থ পাওয়া যায়নি'}</div>
+          </div>
+        `)
+        .join('');
 
       div.innerHTML = `
         <div class="ayah-header">
           <div class="ayah-number"><i class="ph-fill ph-book-open"></i> Ayah ${verse.verse_number}</div>
         </div>
         <div class="ayah-arabic">${verse.text_uthmani}</div>
+        ${wordMarkup ? `<div class="ayah-word-grid">${wordMarkup}</div>` : ''}
         <div class="ayah-separator"><i class="ph-fill ph-star-four"></i></div>
         <div class="ayah-bangla">${verse.translations?.[0]?.text || "অনুবাদ পাওয়া যায়নি।"}</div>
       `;
+
+      return div;
+    }
+
+    function createAyahCard(verse, surah, delay) {
+      const div = document.createElement('div');
+      div.className = 'ayah-card';
+      div.style.animationDelay = `${delay}s`;
+      const fallbackWordMeaning = 'Meaning unavailable';
+      const fallbackTranslation = 'Translation unavailable.';
+      const words = (verse.words || []).filter(word => word.char_type_name === 'word');
+      const wordMarkup = words
+        .map((word, index) => `
+          <div class="ayah-word-card${word.audio_url ? ' playable' : ''}" data-word-index="${index}">
+            <div class="ayah-word-ar">${word.text_uthmani || word.text || ''}</div>
+            <div class="ayah-word-bn">${word.translation?.text || fallbackWordMeaning}</div>
+          </div>
+        `)
+        .join('');
+      const hasWordMeaning = Boolean(wordMarkup);
+
+      div.innerHTML = `
+        <div class="ayah-header">
+          <div class="ayah-number"><i class="ph-fill ph-book-open"></i> Ayah ${verse.verse_number}</div>
+          ${hasWordMeaning ? `
+            <button class="ayah-toggle-btn" type="button">
+              <i class="ph ph-translate"></i>
+              <span>See Meaning</span>
+            </button>
+          ` : ''}
+        </div>
+        <div class="ayah-arabic">${verse.text_uthmani}</div>
+        ${hasWordMeaning ? `<div class="ayah-word-section"><div class="ayah-word-grid">${wordMarkup}</div></div>` : ''}
+        <div class="ayah-separator"><i class="ph-fill ph-star-four"></i></div>
+        <div class="ayah-bangla">${verse.translations?.[0]?.text || fallbackTranslation}</div>
+      `;
+
+      if (hasWordMeaning) {
+        const toggleButton = div.querySelector('.ayah-toggle-btn');
+        const wordSection = div.querySelector('.ayah-word-section');
+        const buttonText = toggleButton.querySelector('span');
+        const wordCards = div.querySelectorAll('.ayah-word-card.playable');
+
+        toggleButton.addEventListener('click', () => {
+          const isVisible = wordSection.classList.toggle('visible');
+          toggleButton.classList.toggle('active', isVisible);
+          buttonText.textContent = isVisible ? 'Hide Meaning' : 'See Meaning';
+        });
+
+        wordCards.forEach(card => {
+          card.addEventListener('click', () => {
+            const wordIndex = Number(card.dataset.wordIndex);
+            const word = words[wordIndex];
+            if (!word) return;
+            playWordAudio(word, surah, verse.verse_number, card);
+          });
+        });
+      }
+
+      return div;
+    }
+
+    function createAyahCard(verse, surah, delay) {
+      const div = document.createElement('div');
+      div.className = 'ayah-card playable-ayah';
+      div.style.animationDelay = `${delay}s`;
+      div.setAttribute('role', 'button');
+      div.setAttribute('tabindex', '0');
+
+      div.innerHTML = `
+        <div class="ayah-header">
+          <div class="ayah-number"><i class="ph-fill ph-book-open"></i> Ayah ${verse.verse_number}</div>
+        </div>
+        <div class="ayah-arabic">${verse.text_uthmani}</div>
+      `;
+
+      const playSelectedAyah = () => playAyahAudio(verse, surah, div);
+
+      div.addEventListener('click', playSelectedAyah);
+      div.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          playSelectedAyah();
+        }
+      });
+
+      return div;
+    }
+
+    function createAyahCard(verse, surah, delay) {
+      const div = document.createElement('div');
+      div.className = 'ayah-card';
+      div.style.animationDelay = `${delay}s`;
+      const fallbackTranslation = 'Translation unavailable.';
+      const words = (verse.words || []).filter(word => word.char_type_name === 'word');
+      const arabicMarkup = words.length
+        ? words.map((word, index) => `
+            <span class="ayah-word-inline${word.audio_url ? ' playable' : ''}" data-word-index="${index}">${word.text_uthmani || word.text || ''}</span>
+          `).join(' ')
+        : verse.text_uthmani;
+
+      div.innerHTML = `
+        <div class="ayah-header">
+          <div class="ayah-number"><i class="ph-fill ph-book-open"></i> Ayah ${verse.verse_number}</div>
+        </div>
+        <div class="ayah-arabic">${arabicMarkup}</div>
+        <div class="ayah-separator"><i class="ph-fill ph-star-four"></i></div>
+        <div class="ayah-bangla">${verse.translations?.[0]?.text || fallbackTranslation}</div>
+      `;
+
+      const wordSpans = div.querySelectorAll('.ayah-word-inline.playable');
+      wordSpans.forEach(span => {
+        span.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const wordIndex = Number(span.dataset.wordIndex);
+          const word = words[wordIndex];
+          if (!word) return;
+          playWordAudio(word, surah, verse.verse_number, span);
+        });
+      });
 
       return div;
     }
@@ -1173,9 +1471,60 @@ button {
       }
     }
 
+    function resolveAudioUrl(audioPath) {
+      if (!audioPath) return '';
+      if (/^https?:\/\//i.test(audioPath)) return audioPath;
+      return `https://audio.qurancdn.com/${audioPath.replace(/^\/+/, '')}`;
+    }
+
+    function clearPlayingAyahState() {
+      document.querySelectorAll('.ayah-card.playing-ayah').forEach(card => {
+        card.classList.remove('playing-ayah');
+      });
+    }
+
+    function clearPlayingWordState() {
+      document.querySelectorAll('.ayah-word-inline.playing, .ayah-word-card.playing').forEach(card => {
+        card.classList.remove('playing');
+      });
+    }
+
+    function showAyahMeaningBar(surah, verse) {
+      dom.ayahMeaningRef.textContent = `${surah.name_simple} - Ayah ${verse.verse_number}`;
+      dom.ayahMeaningText.innerHTML = verse.translations?.[0]?.text || 'Translation unavailable.';
+      dom.ayahMeaningBar.classList.add('visible');
+    }
+
+    function showWordMeaningBar(surah, verseNumber, word) {
+      if (state.wordMeaningTimer) {
+        clearTimeout(state.wordMeaningTimer);
+      }
+      dom.ayahMeaningRef.textContent = `${surah.name_simple} - Ayah ${verseNumber}`;
+      dom.ayahMeaningText.textContent = word.translation?.text || 'Meaning unavailable.';
+      dom.ayahMeaningBar.classList.add('visible');
+      state.wordMeaningTimer = setTimeout(() => {
+        hideAyahMeaningBar();
+        clearPlayingWordState();
+        state.wordMeaningTimer = null;
+      }, 5000);
+    }
+
+    function hideAyahMeaningBar() {
+      if (state.wordMeaningTimer) {
+        clearTimeout(state.wordMeaningTimer);
+        state.wordMeaningTimer = null;
+      }
+      dom.ayahMeaningBar.classList.remove('visible');
+    }
+
     async function playSurahAudio(chapterId) {
       try {
         state.isBuffering = true;
+        state.playbackMode = 'surah';
+        state.activeAyah = null;
+        clearPlayingWordState();
+        clearPlayingAyahState();
+        hideAyahMeaningBar();
         dom.playerDock.classList.add('visible');
         renderPlayIcon();
 
@@ -1193,6 +1542,89 @@ button {
         state.isBuffering = false;
         renderPlayIcon();
         alert("Audio unavailable for this reciter.");
+      }
+    }
+
+    async function playAyahAudio(verse, surah, ayahCard) {
+      const ayahAudioUrl = resolveAudioUrl(verse.audio?.url);
+      if (!ayahAudioUrl) {
+        alert("Audio unavailable for this ayah.");
+        return;
+      }
+
+      try {
+        state.isBuffering = true;
+        state.playbackMode = 'ayah';
+        state.activeAyah = verse;
+        clearPlayingWordState();
+        clearPlayingAyahState();
+        if (ayahCard) ayahCard.classList.add('playing-ayah');
+        dom.playerDock.classList.remove('visible');
+        renderPlayIcon();
+        showAyahMeaningBar(surah, verse);
+
+        dom.audio.src = ayahAudioUrl;
+        await dom.audio.play();
+      } catch (err) {
+        state.isBuffering = false;
+        clearPlayingAyahState();
+        renderPlayIcon();
+        alert("Unable to play this ayah right now.");
+      }
+    }
+
+    async function playWordAudio(word, surah, verseNumber, wordCard) {
+      const wordAudioUrl = resolveAudioUrl(word.audio_url);
+      if (!wordAudioUrl) {
+        alert("Audio unavailable for this word.");
+        return;
+      }
+
+      try {
+        state.isBuffering = true;
+        state.playbackMode = 'word';
+        clearPlayingWordState();
+        if (wordCard) wordCard.classList.add('playing');
+        dom.playerDock.classList.add('visible');
+        renderPlayIcon();
+
+        dom.audio.src = wordAudioUrl;
+        dom.playerTitle.textContent = `${surah.name_simple} • Ayah ${verseNumber}`;
+        dom.playerReciter.textContent = `Word: ${word.text_uthmani || word.text || 'Selected word'}`;
+        dom.timeDisplay.textContent = '00:00 / 00:00';
+        await dom.audio.play();
+      } catch (err) {
+        state.isBuffering = false;
+        clearPlayingWordState();
+        renderPlayIcon();
+        alert("Unable to play this word right now.");
+      }
+    }
+
+    async function playWordAudio(word, surah, verseNumber, wordCard) {
+      const wordAudioUrl = resolveAudioUrl(word.audio_url);
+      if (!wordAudioUrl) {
+        alert("Audio unavailable for this word.");
+        return;
+      }
+
+      try {
+        state.isBuffering = true;
+        state.playbackMode = 'word';
+        clearPlayingWordState();
+        clearPlayingAyahState();
+        if (wordCard) wordCard.classList.add('playing');
+        dom.playerDock.classList.remove('visible');
+        renderPlayIcon();
+        showWordMeaningBar(surah, verseNumber, word);
+
+        dom.audio.src = wordAudioUrl;
+        await dom.audio.play();
+      } catch (err) {
+        state.isBuffering = false;
+        clearPlayingWordState();
+        renderPlayIcon();
+        alert("Unable to play this word right now.");
       }
     }
 
@@ -1218,7 +1650,13 @@ button {
 
       dom.audio.addEventListener('ended', () => {
         dom.progressBar.style.width = `0%`;
-        if(state.activeSurah && state.activeSurah.id < 114) {
+        clearPlayingWordState();
+        clearPlayingAyahState();
+        if (state.playbackMode === 'ayah' || state.playbackMode === 'word') {
+          hideAyahMeaningBar();
+          state.activeAyah = null;
+        }
+        if(state.playbackMode === 'surah' && state.activeSurah && state.activeSurah.id < 114) {
           const nextSurahId = state.activeSurah.id + 1;
           const nextSurah = state.surahs.find(s => s.id === nextSurahId);
           if(nextSurah) {
@@ -1238,17 +1676,33 @@ button {
 
       dom.closePlayerBtn.addEventListener('click', () => {
         dom.audio.pause();
+        clearPlayingWordState();
+        clearPlayingAyahState();
+        hideAyahMeaningBar();
+        state.activeAyah = null;
         dom.playerDock.classList.remove('visible');
+      });
+
+      dom.ayahMeaningClose.addEventListener('click', () => {
+        dom.audio.pause();
+        clearPlayingWordState();
+        clearPlayingAyahState();
+        hideAyahMeaningBar();
+        state.activeAyah = null;
       });
 
       dom.reciterSelect.addEventListener('change', (e) => {
         state.activeReciterId = e.target.value;
         localStorage.setItem('reciter', state.activeReciterId);
-        if(!dom.audio.paused && state.activeSurah) {
+        if(state.playbackMode === 'surah' && !dom.audio.paused && state.activeSurah) {
           playSurahAudio(state.activeSurah.id);
+        } else if (state.playbackMode === 'ayah' && state.activeAyah && state.activeSurah) {
+          playAyahAudio(state.activeAyah, state.activeSurah, document.querySelector('.ayah-card.playing-ayah'));
         } else if (state.activeSurah) {
            const reciterName = dom.reciterSelect.options[dom.reciterSelect.selectedIndex].text;
-           dom.playerReciter.textContent = reciterName;
+           if (state.playbackMode === 'surah') {
+             dom.playerReciter.textContent = reciterName;
+           }
         }
       });
     }
